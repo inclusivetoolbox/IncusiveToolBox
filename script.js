@@ -53,6 +53,11 @@ function toggleDemo() {
 
 // ── CONFIG MODAL ──────────────────────────────────────────
 function openConfigModal() {
+  const pw = prompt('Contraseña para acceder a la configuración:');
+  if (pw !== MASTER_PASSWORD) {
+    if (pw !== null) alert('Contraseña incorrecta.');
+    return;
+  }
   const c = getConfig();
   document.getElementById('cfg-sheet-url').value = c.sheetUrl || '';
   document.getElementById('cfg-script-url').value = c.scriptUrl || '';
@@ -86,12 +91,13 @@ function closeDrawer() {
   document.getElementById('upload-btn').classList.remove('active');
 }
 
+// ── CONTRASEÑA MAESTRA ────────────────────────────────────
+const MASTER_PASSWORD = 'admin2026';
+
 // ── LOGIN ─────────────────────────────────────────────────
 function doLogin() {
   const val = document.getElementById('pw-input').value;
-  const cfg = getConfig();
-  const correct = cfg.password || 'profesor2025';
-  if (val === correct) {
+  if (val === MASTER_PASSWORD) {
     loggedIn = true;
     document.getElementById('pw-error').classList.remove('visible');
     showForm();
