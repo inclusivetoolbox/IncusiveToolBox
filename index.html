@@ -128,8 +128,15 @@
           </div>
         </div>
 
+        <label class="field-label">Archivo <span style="opacity:.5;font-weight:400">(sube un archivo o pega un enlace abajo)</span></label>
+        <div class="upload-file-row">
+          <label class="upload-file-label" for="f-file">📎 Subir archivo</label>
+          <input type="file" id="f-file" style="display:none" onchange="uploadFile()">
+          <span id="upload-status"></span>
+        </div>
+
         <label class="field-label">Link / URL *</label>
-        <input class="field-input" type="url" id="f-link" placeholder="https://...">
+        <input class="field-input" type="url" id="f-link" placeholder="https://... (se llena solo al subir un archivo)">
 
         <label class="field-label">Descripción <span style="opacity:.5;font-weight:400">(opcional)</span></label>
         <textarea class="field-input" id="f-desc" placeholder="Breve descripción del recurso..."></textarea>

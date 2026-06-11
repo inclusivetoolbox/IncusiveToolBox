@@ -1,4 +1,6 @@
 const STORAGE_KEY = 'cajah_utb_v3';
+const CLOUDINARY_CLOUD  = 'dtxp7zvja';
+const CLOUDINARY_PRESET = 'jrrd4gry';
 let allResources = [];
 let activeType = 'all';
 let searchTerm = '';
@@ -135,6 +137,54 @@ function switchTab(tab) {
   document.getElementById('tab-delete').className = 'dtab' + (tab === 'delete' ? ' active danger' : '');
   document.getElementById('submit-btn').style.display = tab === 'add' ? 'flex' : 'none';
   if (tab === 'delete') renderDeleteList();
+}
+
+// ── CLOUDINARY UPLOAD ─────────────────────────────────────
+async function uploadFile() {
+  const input = document.getElementById('f-file');
+  const file = input.files[0];
+  if (!file) return;
+
+  const btn = document.getElementById('upload-file-btn');
+  const status = document.getElementById('upload-status');
+  btn.disabled = true;
+  btn.textContent = 'Subiendo...';
+  status.textContent = '';
+  status.className = '';
+
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_PRESET);
+  formData.append('folder', 'inclusive-toolbox');
+
+  try {
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/auto/upload`, {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if (data.secure_url) {
+      document.getElementById('f-link').value = data.secure_url;
+      // Auto-detectar tipo por extensión
+      const ext = file.name.split('.').pop().toLowerCase();
+      const tipoMap = { pdf:'PDF', mp4:'Video', mov:'Video', avi:'Video', pptx:'Presentación', ppt:'Presentación', docx:'Enlace', doc:'Enlace' };
+      if (tipoMap[ext]) document.getElementById('f-tipo').value = tipoMap[ext];
+      // Auto-rellenar título si está vacío
+      if (!document.getElementById('f-titulo').value) {
+        document.getElementById('f-titulo').value = file.name.replace(/\.[^/.]+$/, '');
+      }
+      status.textContent = '✓ Archivo subido — URL lista';
+      status.className = 'upload-ok';
+    } else {
+      throw new Error(data.error?.message || 'Error desconocido');
+    }
+  } catch(e) {
+    status.textContent = '✗ Error al subir: ' + e.message;
+    status.className = 'upload-err';
+  }
+  btn.disabled = false;
+  btn.textContent = '📎 Subir archivo';
+  input.value = '';
 }
 
 // ── AGREGAR ───────────────────────────────────────────────

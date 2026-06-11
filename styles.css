@@ -353,3 +353,18 @@ code { background: #dde7f5; padding: 1px 6px; border-radius: 4px; font-size: 0.7
 
 /* ── MODAL MAX-HEIGHT ── */
 .modal { max-height: 90vh; overflow-y: auto; }
+
+/* ── CLOUDINARY UPLOAD ── */
+.upload-file-row {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 0.75rem; flex-wrap: wrap;
+}
+.upload-file-label {
+  background: var(--orange-light); border: 1px solid rgba(232,92,42,0.3);
+  border-radius: 8px; color: var(--orange); font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem; font-weight: 500; padding: 0.55rem 1rem;
+  cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.upload-file-label:hover { background: #f5ddd3; }
+.upload-ok  { font-size: 0.78rem; color: var(--success); font-weight: 500; }
+.upload-err { font-size: 0.78rem; color: var(--error); font-weight: 500; }
