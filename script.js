@@ -4,7 +4,6 @@ const CLOUDINARY_PRESET = 'jrrd4gry';
 let allResources = [];
 let activeType = 'all';
 let searchTerm = '';
-let demoMode = false;
 let loggedIn = false;
 let currentTab = 'add';
 
@@ -13,45 +12,6 @@ document.getElementById('banner-date').textContent =
 
 function getConfig() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; } }
 function setConfig(o) { localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...getConfig(), ...o })); }
-
-// ── DEMO ──────────────────────────────────────────────────
-const DEMO_DATA = [
-  { modulo:'Módulo 1 — Fundamentos de la Educación Inclusiva', titulo:'Introducción a la educación inclusiva', tipo:'PDF', link:'#', descripcion:'Conceptos base, historia y marcos normativos de la inclusión educativa en Colombia.' },
-  { modulo:'Módulo 1 — Fundamentos de la Educación Inclusiva', titulo:'Política de inclusión MEN 2024', tipo:'Enlace', link:'#', descripcion:'Documento oficial del Ministerio de Educación Nacional sobre lineamientos de inclusión.' },
-  { modulo:'Módulo 1 — Fundamentos de la Educación Inclusiva', titulo:'Clase inaugural — Bienvenida al diplomado', tipo:'Video', link:'#', descripcion:'Grabación de la sesión de apertura con presentación del equipo docente.' },
-  { modulo:'Módulo 2 — Diseño Universal para el Aprendizaje', titulo:'Guía DUA — Pautas y principios', tipo:'PDF', link:'#', descripcion:'Guía completa sobre las tres pautas del Diseño Universal para el Aprendizaje.' },
-  { modulo:'Módulo 2 — Diseño Universal para el Aprendizaje', titulo:'Plantilla de planeación inclusiva', tipo:'Plantilla', link:'#', descripcion:'Formato editable para diseñar clases aplicando los principios del DUA.' },
-  { modulo:'Módulo 2 — Diseño Universal para el Aprendizaje', titulo:'Sesión 3 — Medios de representación', tipo:'Presentación', link:'#', descripcion:'Diapositivas de la tercera sesión sincrónica del módulo.' },
-  { modulo:'Módulo 3 — Barreras y Apoyos en el Aprendizaje', titulo:'Identificación de barreras de aprendizaje', tipo:'PDF', link:'#', descripcion:'Tipos de barreras y estrategias de remoción.' },
-  { modulo:'Módulo 3 — Barreras y Apoyos en el Aprendizaje', titulo:'Rúbrica de evaluación inclusiva', tipo:'Plantilla', link:'#', descripcion:'Instrumento para evaluar procesos sin sesgo.' },
-  { modulo:'Módulo 4 — Evaluación y Seguimiento Inclusivo', titulo:'Diseño de evaluaciones flexibles', tipo:'Presentación', link:'#', descripcion:'Estrategias para construir evaluaciones accesibles y diferenciadas.' },
-  { modulo:'Módulo 4 — Evaluación y Seguimiento Inclusivo', titulo:'Portafolio del estudiante — guía de uso', tipo:'PDF', link:'#', descripcion:'Metodología de portafolio como alternativa de evaluación formativa inclusiva.' },
-];
-
-function toggleDemo() {
-  demoMode = !demoMode;
-  const btn = document.getElementById('demo-btn');
-  const ribbon = document.getElementById('demo-ribbon');
-  if (demoMode) {
-    btn.textContent = '✕ Salir del demo'; btn.classList.add('on');
-    ribbon.classList.add('visible');
-    allResources = DEMO_DATA;
-    document.getElementById('stats-bar').style.display = 'flex';
-    renderAll();
-    document.getElementById('last-updated').textContent = 'Vista previa — datos de ejemplo';
-  } else {
-    btn.textContent = '👁 Ver demo'; btn.classList.remove('on');
-    ribbon.classList.remove('visible');
-    const cfg = getConfig();
-    if (cfg.sheetUrl) loadData(cfg.sheetUrl);
-    else {
-      allResources = [];
-      document.getElementById('stats-bar').style.display = 'none';
-      document.getElementById('last-updated').textContent = '';
-      document.getElementById('main-content').innerHTML = emptyState();
-    }
-  }
-}
 
 // ── CONFIG MODAL ──────────────────────────────────────────
 function openConfigModal() {
@@ -73,10 +33,6 @@ function saveConfig() {
   const password  = document.getElementById('cfg-password').value.trim();
   setConfig({ sheetUrl, scriptUrl, password });
   closeConfigModal();
-  demoMode = false;
-  document.getElementById('demo-btn').textContent = '👁 Ver demo';
-  document.getElementById('demo-btn').classList.remove('on');
-  document.getElementById('demo-ribbon').classList.remove('visible');
   if (sheetUrl) loadData(sheetUrl);
 }
 
@@ -220,7 +176,7 @@ async function submitResource() {
     document.getElementById('form-success').classList.add('visible');
     ['f-modulo','f-titulo','f-link','f-desc'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('f-tipo').value = '';
-    if (cfg.sheetUrl && !demoMode) setTimeout(() => loadData(cfg.sheetUrl), 1800);
+    if (cfg.sheetUrl) setTimeout(() => loadData(cfg.sheetUrl), 1800);
   } catch(e) {
     document.getElementById('form-error').textContent = 'Error de red. Verifica la URL del script.';
     document.getElementById('form-error').classList.add('visible');
@@ -231,7 +187,7 @@ async function submitResource() {
 // ── ELIMINAR ──────────────────────────────────────────────
 function renderDeleteList() {
   const q = (document.getElementById('del-search').value || '').toLowerCase();
-  const source = demoMode ? DEMO_DATA : allResources;
+  const source = allResources;
   const el = document.getElementById('delete-list');
 
   if (!source.length) {
@@ -281,7 +237,7 @@ async function deleteResource(idx, rowNum) {
     document.getElementById('del-success').classList.add('visible');
     allResources.splice(idx, 1);
     renderDeleteList();
-    if (cfg.sheetUrl && !demoMode) setTimeout(() => loadData(cfg.sheetUrl), 1800);
+    if (cfg.sheetUrl) setTimeout(() => loadData(cfg.sheetUrl), 1800);
   } catch(e) {
     document.getElementById('del-error').textContent = 'Error de red al eliminar. Verifica la URL del script.';
     document.getElementById('del-error').classList.add('visible');

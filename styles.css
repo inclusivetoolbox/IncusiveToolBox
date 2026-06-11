@@ -31,13 +31,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
 }
 .top-banner span { opacity: 0.6; }
 
-.demo-ribbon {
-  background: var(--orange); color: white;
-  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
-  text-align: center; padding: 0.4rem; display: none;
-}
-.demo-ribbon.visible { display: block; }
-
 /* ── HEADER ── */
 header {
   background: var(--surface); border-bottom: 1px solid var(--border);
@@ -62,9 +55,6 @@ header {
 }
 .btn-ghost { background: transparent; border-color: var(--border); color: var(--muted); }
 .btn-ghost:hover { border-color: var(--navy); color: var(--navy); }
-.btn-demo { background: var(--orange-light); border-color: rgba(232,92,42,0.3); color: var(--orange); font-weight: 500; }
-.btn-demo:hover { background: #f5ddd3; }
-.btn-demo.on { background: var(--orange); color: white; border-color: var(--orange); }
 .btn-upload { background: var(--navy); color: white; border-color: var(--navy); font-weight: 500; }
 .btn-upload:hover { background: var(--navy2); }
 .btn-upload.active { background: var(--orange); border-color: var(--orange); }
