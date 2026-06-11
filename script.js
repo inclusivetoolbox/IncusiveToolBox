@@ -140,8 +140,10 @@ async function uploadFile() {
     status.textContent = '✗ Error al subir: ' + e.message;
     status.className = 'upload-err';
   }
-  btn.disabled = false;
-  btn.textContent = '📎 Subir archivo';
+  if (btn) {
+    btn.disabled = false;
+    btn.textContent = '📎 Subir archivo';
+  }
   input.value = '';
 }
 
