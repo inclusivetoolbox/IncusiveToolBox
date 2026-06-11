@@ -120,8 +120,18 @@ async function uploadFile() {
       method: 'POST',
       body: formData
     });
-    const data = await res.json();
-    if (data.secure_url) {
+    let data = null;
+    let fallbackText = null;
+    try {
+      data = await res.json();
+    } catch (jsonErr) {
+      fallbackText = await res.text();
+    }
+    if (!res.ok) {
+      const msg = data?.error?.message || fallbackText || `${res.status} ${res.statusText}`;
+      throw new Error(msg);
+    }
+    if (data?.secure_url) {
       document.getElementById('f-link').value = data.secure_url;
       // Auto-detectar tipo por extensión
       const ext = file.name.split('.').pop().toLowerCase();
