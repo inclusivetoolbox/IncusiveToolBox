@@ -346,5 +346,9 @@ document.getElementById('config-modal').addEventListener('click', e => {
 });
 
 // ── INIT ──────────────────────────────────────────────────
+const DEFAULT_SHEET  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRmjIRZ29CazcflZEESEjA1Z-qqEV5je3u5nTL_lUO4aa4nR3j-JUEquR9rSD2gfpSbeZkZkNrnM5lm/pub?gid=0&single=true&output=csv';
+const DEFAULT_SCRIPT = 'https://script.google.com/macros/s/AKfycbzDasfteBeG521tlxKiFOKVQ8j2M7vvK-7nnSgqJ7Q1ptg9ppU3aTZnELh-E2Bwd5MOYA/exec';
+
 const _cfg = getConfig();
-if (_cfg.sheetUrl) loadData(_cfg.sheetUrl);
+loadData(_cfg.sheetUrl || DEFAULT_SHEET);
+if (!_cfg.scriptUrl) setConfig({ scriptUrl: DEFAULT_SCRIPT });
