@@ -103,8 +103,10 @@ async function uploadFile() {
 
   const btn = document.getElementById('upload-file-btn');
   const status = document.getElementById('upload-status');
-  btn.disabled = true;
-  btn.textContent = 'Subiendo...';
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'Subiendo...';
+  }
   status.textContent = '';
   status.className = '';
 
